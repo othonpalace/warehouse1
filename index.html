@@ -1,69 +1,90 @@
-<div style="display:flex; justify-content:center; align-items:center; height:100vh;">
-  <button id="playToggle" aria-pressed="false" aria-label="Play" data-playing="false">
-    <!-- Play SVG -->
-    <svg id="iconPlay" xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="currentColor">
-      <polygon points="5,3 19,12 5,21"></polygon>
-    </svg>
-    <!-- Pause SVG (oculto inicialmente) -->
-    <svg id="iconPause" xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="currentColor" style="display:none;">
-      <rect x="5" y="3" width="5" height="18"></rect>
-      <rect x="14" y="3" width="5" height="18"></rect>
-    </svg>
-  </button>
-</div>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Player Minimalista</title>
+    <style>
+        /* Corpo da página centralizado */
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #111; /* cor de fundo opcional */
+        }
 
-<!-- Áudio (pode ser link do Google Drive ou mp3 público) -->
-<audio id="myAudio" src="Times Forever.m4a"></audio>
+        /* Botão SVG Play/Pause */
+        #playToggle {
+            background: none;
+            border: none;
+            color: #fff; /* branco base */
+            cursor: pointer;
+            transition: color 0.2s ease, transform 0.08s ease;
+            user-select: none;
+            padding: 0;
+        }
+        #playToggle:hover { color: #5324C9; }  /* roxo no hover */
+        #playToggle:active { transform: scale(0.96); }
+        #playToggle:focus { outline: none; }
+        svg { vertical-align: middle; }
+    </style>
+</head>
+<body>
 
-<style>
-#playToggle {
-  background:none;
-  border:none;
-  color:#fff;               /* branco base */
-  cursor:pointer;
-  transition: color 0.2s ease, transform 0.08s ease;
-  user-select:none;
-  padding:0;
-}
-#playToggle:hover { color:#5324C9; }  /* roxo no hover */
-#playToggle:active { transform:scale(0.96); }
-#playToggle:focus { outline:none; }
-svg { vertical-align: middle; }
-</style>
+    <button id="playToggle" aria-pressed="false" aria-label="Play" data-playing="false">
+        <!-- Play SVG -->
+        <svg id="iconPlay" xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="currentColor">
+            <polygon points="5,3 19,12 5,21"></polygon>
+        </svg>
+        <!-- Pause SVG (oculto inicialmente) -->
+        <svg id="iconPause" xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="currentColor" style="display:none;">
+            <rect x="5" y="3" width="5" height="18"></rect>
+            <rect x="14" y="3" width="5" height="18"></rect>
+        </svg>
+    </button>
 
-<script>
-(function(){
-  var btn = document.getElementById('playToggle');
-  var playIcon = document.getElementById('iconPlay');
-  var pauseIcon = document.getElementById('iconPause');
-  var audio = document.getElementById('myAudio');
+    <!-- Áudio -->
+    <audio id="myAudio" src="https://docs.google.com/uc?export=download&id=ID_DO_ARQUIVO"></audio>
 
-  btn.addEventListener('click', function(){
-    var playing = btn.getAttribute('data-playing') === 'true';
-    if(!playing){
-      playIcon.style.display = 'none';
-      pauseIcon.style.display = 'inline';
-      audio.play();
-      btn.setAttribute('aria-pressed','true');
-      btn.setAttribute('aria-label','Pause');
-      btn.setAttribute('data-playing','true');
-    } else {
-      playIcon.style.display = 'inline';
-      pauseIcon.style.display = 'none';
-      audio.pause();
-      btn.setAttribute('aria-pressed','false');
-      btn.setAttribute('aria-label','Play');
-      btn.setAttribute('data-playing','false');
-    }
-  });
+    <script>
+    (function(){
+        var btn = document.getElementById('playToggle');
+        var playIcon = document.getElementById('iconPlay');
+        var pauseIcon = document.getElementById('iconPause');
+        var audio = document.getElementById('myAudio');
 
-  // Atualiza o botão se o áudio terminar
-  audio.addEventListener('ended', function(){
-    playIcon.style.display = 'inline';
-    pauseIcon.style.display = 'none';
-    btn.setAttribute('aria-pressed','false');
-    btn.setAttribute('aria-label','Play');
-    btn.setAttribute('data-playing','false');
-  });
-})();
-</script>
+        btn.addEventListener('click', function(){
+            var playing = btn.getAttribute('data-playing') === 'true';
+            if(!playing){
+                playIcon.style.display = 'none';
+                pauseIcon.style.display = 'inline';
+                audio.play();
+                btn.setAttribute('aria-pressed','true');
+                btn.setAttribute('aria-label','Pause');
+                btn.setAttribute('data-playing','true');
+            } else {
+                playIcon.style.display = 'inline';
+                pauseIcon.style.display = 'none';
+                audio.pause();
+                btn.setAttribute('aria-pressed','false');
+                btn.setAttribute('aria-label','Play');
+                btn.setAttribute('data-playing','false');
+            }
+        });
+
+        // Quando o áudio termina, volta para Play
+        audio.addEventListener('ended', function(){
+            playIcon.style.display = 'inline';
+            pauseIcon.style.display = 'none';
+            btn.setAttribute('aria-pressed','false');
+            btn.setAttribute('aria-label','Play');
+            btn.setAttribute('data-playing','false');
+        });
+    })();
+    </script>
+
+</body>
+</html>
