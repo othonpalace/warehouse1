@@ -1,179 +1,69 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Times Forever - Player</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            margin: 0;
-            padding: 20px;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+<div style="display:flex; justify-content:center; align-items:center; height:100vh;">
+  <button id="playToggle" aria-pressed="false" aria-label="Play" data-playing="false">
+    <!-- Play SVG -->
+    <svg id="iconPlay" xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="currentColor">
+      <polygon points="5,3 19,12 5,21"></polygon>
+    </svg>
+    <!-- Pause SVG (oculto inicialmente) -->
+    <svg id="iconPause" xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="currentColor" style="display:none;">
+      <rect x="5" y="3" width="5" height="18"></rect>
+      <rect x="14" y="3" width="5" height="18"></rect>
+    </svg>
+  </button>
+</div>
 
-        .container {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            max-width: 600px;
-            width: 100%;
-        }
+<!-- Áudio (pode ser link do Google Drive ou mp3 público) -->
+<audio id="myAudio" src="Times Forever.m4a"></audio>
 
-        .title {
-            color: #333;
-            font-size: 32px;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
+<style>
+#playToggle {
+  background:none;
+  border:none;
+  color:#fff;               /* branco base */
+  cursor:pointer;
+  transition: color 0.2s ease, transform 0.08s ease;
+  user-select:none;
+  padding:0;
+}
+#playToggle:hover { color:#5324C9; }  /* roxo no hover */
+#playToggle:active { transform:scale(0.96); }
+#playToggle:focus { outline:none; }
+svg { vertical-align: middle; }
+</style>
 
-        .subtitle {
-            color: #666;
-            font-size: 20px;
-            margin-bottom: 40px;
-        }
+<script>
+(function(){
+  var btn = document.getElementById('playToggle');
+  var playIcon = document.getElementById('iconPlay');
+  var pauseIcon = document.getElementById('iconPause');
+  var audio = document.getElementById('myAudio');
 
-        .embed-demo {
-            background: #f8f9fa;
-            padding: 30px;
-            border-radius: 15px;
-            margin: 30px 0;
-            border-left: 4px solid #007bff;
-        }
+  btn.addEventListener('click', function(){
+    var playing = btn.getAttribute('data-playing') === 'true';
+    if(!playing){
+      playIcon.style.display = 'none';
+      pauseIcon.style.display = 'inline';
+      audio.play();
+      btn.setAttribute('aria-pressed','true');
+      btn.setAttribute('aria-label','Pause');
+      btn.setAttribute('data-playing','true');
+    } else {
+      playIcon.style.display = 'inline';
+      pauseIcon.style.display = 'none';
+      audio.pause();
+      btn.setAttribute('aria-pressed','false');
+      btn.setAttribute('aria-label','Play');
+      btn.setAttribute('data-playing','false');
+    }
+  });
 
-        .embed-container {
-            display: inline-block;
-            margin: 20px 0;
-        }
-
-        .info {
-            color: #666;
-            font-size: 16px;
-            line-height: 1.6;
-            margin: 20px 0;
-        }
-
-        .code {
-            background: #2d3748;
-            color: #e2e8f0;
-            padding: 15px;
-            border-radius: 8px;
-            font-family: 'Courier New', monospace;
-            margin: 15px 0;
-            overflow-x: auto;
-            text-align: left;
-        }
-
-        .button {
-            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            font-size: 16px;
-            border-radius: 25px;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-            margin: 10px;
-            transition: all 0.3s ease;
-        }
-
-        .button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
-        }
-
-        .features {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin: 30px 0;
-        }
-
-        .feature {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-        }
-
-        .feature-icon {
-            font-size: 30px;
-            margin-bottom: 10px;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1 class="title">🎵 Times Forever</h1>
-        <p class="subtitle">The Othon Palace</p>
-        
-        <div class="embed-demo">
-            <h3>📱 Player Embebido:</h3>
-            <div class="embed-container">
-                <iframe 
-                    src="embed-player.html" 
-                    width="300" 
-                    height="200" 
-                    frameborder="0"
-                    style="border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
-                </iframe>
-            </div>
-        </div>
-
-        <div class="info">
-            <p>Este é um player de música que pode ser incorporado em qualquer site usando um iframe.</p>
-        </div>
-
-        <div class="features">
-            <div class="feature">
-                <div class="feature-icon">🎵</div>
-                <h4>Player Simples</h4>
-                <p>Um botão de play/pause elegante</p>
-            </div>
-            <div class="feature">
-                <div class="feature-icon">📱</div>
-                <h4>Responsivo</h4>
-                <p>Funciona em desktop e mobile</p>
-            </div>
-            <div class="feature">
-                <div class="feature-icon">🔗</div>
-                <h4>Embeddable</h4>
-                <p>Pode ser incorporado em qualquer site</p>
-            </div>
-            <div class="feature">
-                <div class="feature-icon">🛡️</div>
-                <h4>Protegido</h4>
-                <p>Proteções contra download e inspeção</p>
-            </div>
-        </div>
-
-        <h3>💻 Como Incorporar:</h3>
-        <div class="code">
-&lt;iframe 
-    src="https://seu-usuario.github.io/nome-do-repo/embed-player.html" 
-    width="300" 
-    height="200" 
-    frameborder="0"
-    style="border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);"&gt;
-&lt;/iframe&gt;
-        </div>
-
-        <div style="margin-top: 30px;">
-            <a href="embed-player.html" class="button" target="_blank">🎵 Abrir Player</a>
-            <a href="embed-example.html" class="button" target="_blank">📖 Ver Exemplo</a>
-        </div>
-
-        <div class="info">
-            <p><strong>📏 Tamanhos Recomendados:</strong></p>
-            <p>Pequeno: 250x180px | Médio: 300x200px | Grande: 400x250px</p>
-        </div>
-    </div>
-</body>
-</html>
+  // Atualiza o botão se o áudio terminar
+  audio.addEventListener('ended', function(){
+    playIcon.style.display = 'inline';
+    pauseIcon.style.display = 'none';
+    btn.setAttribute('aria-pressed','false');
+    btn.setAttribute('aria-label','Play');
+    btn.setAttribute('data-playing','false');
+  });
+})();
+</script>
