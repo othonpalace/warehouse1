@@ -110,70 +110,75 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1 class="title">🎵 Times Forever</h1>
-        <p class="subtitle">The Othon Palace</p>
-        
-        <div class="embed-demo">
-            <h3>📱 Player Embebido:</h3>
-            <div class="embed-container">
-                <iframe 
-                    src="embed-player.html" 
-                    width="300" 
-                    height="200" 
-                    frameborder="0"
-                    style="border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
-                </iframe>
-            </div>
-        </div>
+    <div style="display:flex; justify-content:center; align-items:center; height:100vh;">
+  <button id="playToggle" aria-pressed="false" aria-label="Play" data-playing="false">
+    <!-- Play SVG -->
+    <svg id="iconPlay" xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="currentColor">
+      <polygon points="5,3 19,12 5,21"></polygon>
+    </svg>
+    <!-- Pause SVG (oculto inicialmente) -->
+    <svg id="iconPause" xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="currentColor" style="display:none;">
+      <rect x="5" y="3" width="5" height="18"></rect>
+      <rect x="14" y="3" width="5" height="18"></rect>
+    </svg>
+  </button>
+</div>
 
-        <div class="info">
-            <p>Este é um player de música que pode ser incorporado em qualquer site usando um iframe.</p>
-        </div>
+<!-- Áudio (pode ser link do Google Drive ou mp3 público) -->
+<audio id="myAudio" src="https://docs.google.com/uc?export=download&id=ID_DO_ARQUIVO"></audio>
 
-        <div class="features">
-            <div class="feature">
-                <div class="feature-icon">🎵</div>
-                <h4>Player Simples</h4>
-                <p>Um botão de play/pause elegante</p>
-            </div>
-            <div class="feature">
-                <div class="feature-icon">📱</div>
-                <h4>Responsivo</h4>
-                <p>Funciona em desktop e mobile</p>
-            </div>
-            <div class="feature">
-                <div class="feature-icon">🔗</div>
-                <h4>Embeddable</h4>
-                <p>Pode ser incorporado em qualquer site</p>
-            </div>
-            <div class="feature">
-                <div class="feature-icon">🛡️</div>
-                <h4>Protegido</h4>
-                <p>Proteções contra download e inspeção</p>
-            </div>
-        </div>
+<style>
+#playToggle {
+  background:none;
+  border:none;
+  color:#fff;               /* branco base */
+  cursor:pointer;
+  transition: color 0.2s ease, transform 0.08s ease;
+  user-select:none;
+  padding:0;
+}
+#playToggle:hover { color:#5324C9; }  /* roxo no hover */
+#playToggle:active { transform:scale(0.96); }
+#playToggle:focus { outline:none; }
+svg { vertical-align: middle; }
+</style>
 
-        <h3>💻 Como Incorporar:</h3>
-        <div class="code">
-&lt;iframe 
-    src="https://seu-usuario.github.io/nome-do-repo/embed-player.html" 
-    width="300" 
-    height="200" 
-    frameborder="0"
-    style="border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);"&gt;
-&lt;/iframe&gt;
-        </div>
+<script>
+(function(){
+  var btn = document.getElementById('playToggle');
+  var playIcon = document.getElementById('iconPlay');
+  var pauseIcon = document.getElementById('iconPause');
+  var audio = document.getElementById('myAudio');
 
-        <div style="margin-top: 30px;">
-            <a href="embed-player.html" class="button" target="_blank">🎵 Abrir Player</a>
-            <a href="embed-example.html" class="button" target="_blank">📖 Ver Exemplo</a>
-        </div>
+  btn.addEventListener('click', function(){
+    var playing = btn.getAttribute('data-playing') === 'true';
+    if(!playing){
+      playIcon.style.display = 'none';
+      pauseIcon.style.display = 'inline';
+      audio.play();
+      btn.setAttribute('aria-pressed','true');
+      btn.setAttribute('aria-label','Pause');
+      btn.setAttribute('data-playing','true');
+    } else {
+      playIcon.style.display = 'inline';
+      pauseIcon.style.display = 'none';
+      audio.pause();
+      btn.setAttribute('aria-pressed','false');
+      btn.setAttribute('aria-label','Play');
+      btn.setAttribute('data-playing','false');
+    }
+  });
 
-        <div class="info">
-            <p><strong>📏 Tamanhos Recomendados:</strong></p>
-            <p>Pequeno: 250x180px | Médio: 300x200px | Grande: 400x250px</p>
-        </div>
-    </div>
+  // Atualiza o botão se o áudio terminar
+  audio.addEventListener('ended', function(){
+    playIcon.style.display = 'inline';
+    pauseIcon.style.display = 'none';
+    btn.setAttribute('aria-pressed','false');
+    btn.setAttribute('aria-label','Play');
+    btn.setAttribute('data-playing','false');
+  });
+})();
+</script>
+
 </body>
 </html>
