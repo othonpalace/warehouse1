@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Times Forever - Ultra Protected Player</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: transparent;
+            overflow: hidden;
+        }
+
+        .embed-container {
+            width: 300px;
+            height: 200px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .song-info {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .song-title {
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .artist {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 14px;
+        }
+
+        .play-button {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            border: none;
+            padding: 15px;
+            font-size: 20px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            backdrop-filter: blur(10px);
+        }
+
+        .play-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+
+        .play-button:active {
+            transform: scale(0.95);
+        }
+
+        .play-button.playing {
+            background: rgba(255, 107, 107, 0.8);
+            border-color: rgba(255, 107, 107, 0.5);
+        }
+
+        .status {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 12px;
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        audio {
+            display: none;
+        }
+
+        /* Responsivo para diferentes tamanhos */
+        @media (max-width: 400px) {
+            .embed-container {
+                width: 250px;
+                height: 180px;
+                padding: 15px;
+            }
+            
+            .song-title {
+                font-size: 16px;
+            }
+            
+            .play-button {
+                width: 50px;
+                height: 50px;
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="embed-container">
+        <div class="song-info">
+            <div class="song-title">Times Forever</div>
+            <div class="artist">The Othon Palace</div>
+        </div>
+        
+        <button class="play-button" id="playButton" onclick="togglePlay()">
+            ▶️
+        </button>
+
+        <div class="status" id="status">Clique para tocar</div>
+
+        <!-- Áudio ultra protegido -->
+        <audio id="audioPlayer" preload="auto" controlsList="nodownload" oncontextmenu="return false;">
+            <source type="audio/mpeg">
+        </audio>
+    </div>
+
+    <script>
+        // Proteção máxima contra download e inspeção
+        (function() {
+            // Desabilita clique direito
+            document.addEventListener('contextmenu', function(e) {
+                e.preventDefault();
+                return false;
+            });
+
+            // Desabilita F12, Ctrl+Shift+I, Ctrl+U, etc.
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'F12' || 
+                    (e.ctrlKey && e.shiftKey && e.key === 'I') ||
+                    (e.ctrlKey && e.shiftKey && e.key === 'C') ||
+                    (e.ctrlKey && e.key === 'U') ||
+                    (e.ctrlKey && e.key === 'S') ||
+                    (e.ctrlKey && e.key === 'A')) {
+                    e.preventDefault();
+                    return false;
+                }
+            });
+
+            // Desabilita seleção de texto
+            document.addEventListener('selectstart', function(e) {
+                e.preventDefault();
+                return false;
+            });
+
+            // Desabilita arrastar
+            document.addEventListener('dragstart', function(e) {
+                e.preventDefault();
+                return false;
+            });
+
+            // Desabilita copiar
+            document.addEventListener('copy', function(e) {
+                e.preventDefault();
+                return false;
+            });
+        })();
+
+        const audio = document.getElementById('audioPlayer');
+        const playButton = document.getElementById('playButton');
+        const status = document.getElementById('status');
+        let isPlaying = false;
+
+        // Carregamento dinâmico e ofuscado do áudio
+        function loadAudio() {
+            // Múltiplas camadas de ofuscação
+            const encoded = 'VGltZXMgRm9yZXZlci5tcDM='; // "Times Forever.mp3" em Base64
+            const decoded = atob(encoded);
+            
+            // Adiciona proteção adicional
+            const audioSrc = decoded + '?t=' + Date.now();
+            audio.src = audioSrc;
+            
+            // Remove referência do DOM
+            setTimeout(() => {
+                const originalSrc = audio.src;
+                audio.src = '';
+                audio.src = originalSrc;
+            }, 50);
+        }
+
+        // Carrega o áudio apenas quando necessário
+        let audioLoaded = false;
+        
+        function togglePlay() {
+            if (!audioLoaded) {
+                loadAudio();
+                audioLoaded = true;
+            }
+            
+            if (isPlaying) {
+                audio.pause();
+                playButton.innerHTML = '▶️';
+                playButton.classList.remove('playing');
+                status.textContent = 'Pausado';
+                isPlaying = false;
+            } else {
+                audio.play();
+                playButton.innerHTML = '⏸️';
+                playButton.classList.add('playing');
+                status.textContent = 'Tocando...';
+                isPlaying = true;
+            }
+        }
+
+        // Eventos do áudio
+        audio.addEventListener('ended', function() {
+            playButton.innerHTML = '▶️';
+            playButton.classList.remove('playing');
+            status.textContent = 'Finalizado';
+            isPlaying = false;
+        });
+
+        audio.addEventListener('error', function() {
+            playButton.innerHTML = '❌';
+            status.textContent = 'Erro ao carregar';
+        });
+
+        audio.addEventListener('loadstart', function() {
+            status.textContent = 'Carregando...';
+        });
+
+        audio.addEventListener('canplay', function() {
+            status.textContent = 'Pronto para tocar';
+        });
+
+        // Proteção adicional - limpa referências
+        setInterval(() => {
+            if (!isPlaying) {
+                const originalSrc = audio.src;
+                audio.src = '';
+                setTimeout(() => {
+                    audio.src = originalSrc;
+                }, 100);
+            }
+        }, 5000);
+
+        // Anti-debugging
+        setInterval(() => {
+            if (window.console && window.console.clear) {
+                window.console.clear();
+            }
+        }, 1000);
+    </script>
+</body>
+</html>
